@@ -6,9 +6,9 @@ import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Typography, Button, Box, Grid, Stack, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { ryoshi_abi_fee_token } from './artifacts/RyoshiNFT'
-require('dotenv').config();
-const key = process.env.REACT_APP_PINATA_KEY;
-const secret = process.env.REACT_APP_PINATA_SECRET;
+// require('dotenv').config();
+const key = "615fb1bafae90f82281c";
+const secret = "dd48c20d5ac32a454e493be906351cc6991887ea06232b36010578fab78c9268";
 
 var web3 = null;
 const client = create('https://ipfs.infura.io:5001/api/v0')
@@ -18,16 +18,16 @@ const UPLOAD_TYPE = {
   METADATA: "metadata"
 }
 
-var metadata_template = {
-  "name": "",
-  "description": "",
-  "image": "",
-  "attributes": [{
-    "trait_type": "popular",
-    "value": 100
-  }],
-  "animation_url": ""
-}
+// var metadata_template = {
+//   "name": "",
+//   "description": "",
+//   "image": "",
+//   "attributes": [{
+//     "trait_type": "popular",
+//     "value": 100
+//   }],
+//   "animation_url": ""
+// }
 
 function App() {
   const [imageUrl, setImageUrl] = useState("https://ipfs.infura.io/ipfs/QmPjPuf1W4SpYZ4rqARAsNqGBrdfXMVW5euh9AgL6uideS");
@@ -253,7 +253,7 @@ function App() {
 
   const pinJSONToIPFS = async (JSONBody) => {
     const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
-    //making axios POST request to Pinata ⬇️
+    //making axios POST request to Pinata
     axios.post(url, JSONBody, {
       headers: {
         pinata_api_key: key,
