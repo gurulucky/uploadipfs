@@ -5,7 +5,7 @@ import useStateWithCallback from 'use-state-with-callback';
 import { create } from 'ipfs-http-client';
 import axios from 'axios';
 import { Typography, Button, Box, Grid, Stack, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import {ryoshi_abi_fee_token} from './artifacts/RyoshiNFT'
+import { ryoshi_abi_fee_token } from './artifacts/RyoshiNFT'
 require('dotenv').config();
 const key = process.env.REACT_APP_PINATA_KEY;
 const secret = process.env.REACT_APP_PINATA_SECRET;
@@ -43,7 +43,7 @@ function App() {
   // const [contractAddress, setContractAdsress] = useState("0x8F2d332d58442D1deCDbD58DbD4316e28E8f3e17"); // no minting fee
   // const [contractAddress, setContractAdsress] = useState("0xfca2e3f8db4864a2fefa563a7a76e5d16611d7ee"); // minting fee
   const [contractAddress, setContractAdsress] = useState("0x7314d1a6369afd2cdcee1b9b26308ebcc8e70033"); // minting fee + token
-//  0x7314D1a6369AFD2CdceE1B9B26308eBCC8e70033
+  //  0x7314D1a6369AFD2CdceE1B9B26308eBCC8e70033
 
 
   const uploadImgRef = useRef(null);
@@ -67,7 +67,7 @@ function App() {
       console.log("metamask not installed.");
     }
   }
-/// window.ethereum used to get addrss
+  /// window.ethereum used to get addrss
   // const conMetamask = async () => {
   //   if (window.ethereum) {
   //     try {
@@ -98,7 +98,7 @@ function App() {
     let lowCase = address.toLowerCase();
     return "0x" + lowCase.charAt(2).toUpperCase() + lowCase.substr(3, 3) + "..." + lowCase.substr(-4);
   }
-
+  ///   using ipfs-clinet
   async function onUpload(e, type) {
     setDisable(true);
     const file = e.target.files[0];
@@ -119,7 +119,39 @@ function App() {
     }
     setDisable(false);
   }
-////  using pinata for uploading file(image)
+  ///////////     using pinata api
+  // async function onUpload(e, type) {
+  //   setDisable(true);
+  //   const file = e.target.files[0];
+  //   // pinFileToIPFS(file);
+  //   try {
+  //     setStatus('uploading file...');
+  //     const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+
+  //     axios
+  //       .post(url, file, {
+  //         maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
+  //         headers: {
+  //           'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+  //           pinata_api_key: key,
+  //           pinata_secret_api_key: secret
+  //         }
+  //       })
+  //       .then(function (response) {
+  //         setMetadataUrl("https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+  //         setStatus("image uploaded at https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+  //         setDisable(false);
+  //       })
+  //       .catch(function (error) {
+  //         setStatus("image upload fail", error.message);
+  //         setDisable(false);
+  //       });
+  //   } catch (error) {
+  //     console.log('Error uploading file: ', error)
+  //   }
+  //   setDisable(false);
+  // }
+  ////  using pinata for uploading file(image)
   // const pinFileToIPFS = (file) => {
   //   setStatus("image uploading now...");
   //   const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
