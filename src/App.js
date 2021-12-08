@@ -236,7 +236,7 @@ function App() {
     metadata.description = metaData.description;
 
     //make pinata call
-    await pinJSONToIPFS(metadata);
+    // await pinJSONToIPFS(metadata);
     try{
       const cid = await client.add(
         { path: 'metadata0.json', content: JSON.stringify(metadata) }, 
