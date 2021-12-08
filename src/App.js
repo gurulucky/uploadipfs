@@ -2,12 +2,13 @@
 import React, { useRef, useState } from 'react';
 import Web3 from 'web3'
 import useStateWithCallback from 'use-state-with-callback';
-import { create } from 'ipfs-http-client'
+import { create } from 'ipfs-http-client';
+import axios from 'axios';
 import { Typography, Button, Box, Grid, Stack, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import {ryoshi_abi_fee_token} from './artifacts/RyoshiNFT'
 require('dotenv').config();
-// const key = process.env.REACT_APP_PINATA_KEY;
-// const secret = process.env.REACT_APP_PINATA_SECRET;
+const key = process.env.REACT_APP_PINATA_KEY;
+const secret = process.env.REACT_APP_PINATA_SECRET;
 
 var web3 = null;
 const client = create('https://ipfs.infura.io:5001/api/v0')
@@ -29,7 +30,7 @@ var metadata_template = {
 }
 
 function App() {
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("https://ipfs.infura.io/ipfs/QmPjPuf1W4SpYZ4rqARAsNqGBrdfXMVW5euh9AgL6uideS");
   const [metadataUrl, setMetadataUrl] = useState('');
   const [metaData, setMetaData] = useState({ name: '', description: '' });
   const [open, setOpen] = useState(false);
@@ -187,7 +188,7 @@ function App() {
   const uploadMetadata = async () => {
     // console.log(metaData);
     setDisable(true);
-    setImageUrl("https://ipfs.infura.io/ipfs/QmPjPuf1W4SpYZ4rqARAsNqGBrdfXMVW5euh9AgL6uideS");
+    // setImageUrl("https://ipfs.infura.io/ipfs/QmPjPuf1W4SpYZ4rqARAsNqGBrdfXMVW5euh9AgL6uideS");
     if (metaData.name === "" || metaData.description === "") {
       // if (metaData.name === "" || metaData.description === "") {
       setOpen(true);
@@ -203,40 +204,40 @@ function App() {
     metadata.description = metaData.description;
 
     //make pinata call
-    // await pinJSONToIPFS(metadata);
-    try{
-      const cid = await client.add(
-        { path: 'metadata0.json', content: JSON.stringify(metadata) }, 
-        { wrapWithDirectory: true }
-      );
-      console.log(cid);
-      setMetadataUrl(cid);
-      setStatus(`metadata uploaded at https://ipfs.infura.io/ipfs/${cid.cid.toString()}`);
-      setDisable(false);
-    }catch(err){
-      console.log('metadata err',err);
-    }    
+    await pinJSONToIPFS(metadata);
+    // try{
+    //   const cid = await client.add(
+    //     { path: 'metadata0.json', content: JSON.stringify(metadata) }, 
+    //     { wrapWithDirectory: true }
+    //   );
+    //   console.log(cid);
+    //   setMetadataUrl(cid);
+    //   setStatus(`metadata uploaded at https://ipfs.infura.io/ipfs/${cid.cid.toString()}`);
+    //   setDisable(false);
+    // }catch(err){
+    //   console.log('metadata err',err);
+    // }    
   }
 
-  // const pinJSONToIPFS = async (JSONBody) => {
-  //   const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
-  //   //making axios POST request to Pinata ⬇️
-  //   axios.post(url, JSONBody, {
-  //     headers: {
-  //       pinata_api_key: key,
-  //       pinata_secret_api_key: secret,
-  //     }
-  //   })
-  //     .then(function (response) {
-  //       setMetadataUrl("https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
-  //       setStatus("metadata uploaded at https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
-  //       setDisable(false);
-  //     })
-  //     .catch(function (error) {
-  //       setStatus("metadata upload fail", error.message);
-  //       setDisable(false);
-  //     });
-  // };
+  const pinJSONToIPFS = async (JSONBody) => {
+    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+    //making axios POST request to Pinata ⬇️
+    axios.post(url, JSONBody, {
+      headers: {
+        pinata_api_key: key,
+        pinata_secret_api_key: secret,
+      }
+    })
+      .then(function (response) {
+        setMetadataUrl("https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+        setStatus("metadata uploaded at https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+        setDisable(false);
+      })
+      .catch(function (error) {
+        setStatus("metadata upload fail", error.message);
+        setDisable(false);
+      });
+  };
 
   const mint = (tokenUri) => {
     if (userAccount === "") {
