@@ -236,40 +236,40 @@ function App() {
     metadata.description = metaData.description;
 
     //make pinata call
-    // await pinJSONToIPFS(metadata);
-    try{
-      const cid = await client.add(
-        { path: 'metadata0.json', content: JSON.stringify(metadata) }, 
-        { wrapWithDirectory: true }
-      );
-      console.log(cid);
-      setMetadataUrl(cid);
-      setStatus(`metadata uploaded at https://ipfs.infura.io/ipfs/${cid.cid.toString()}`);
-      setDisable(false);
-    }catch(err){
-      console.log('metadata err',err);
-    }    
+    await pinJSONToIPFS(metadata);
+    // try{
+    //   const cid = await client.add(
+    //     { path: 'metadata0.json', content: JSON.stringify(metadata) }, 
+    //     { wrapWithDirectory: true }
+    //   );
+    //   console.log(cid);
+    //   setMetadataUrl(cid);
+    //   setStatus(`metadata uploaded at https://ipfs.infura.io/ipfs/${cid.cid.toString()}`);
+    //   setDisable(false);
+    // }catch(err){
+    //   console.log('metadata err',err);
+    // }    
   }
 
-  // const pinJSONToIPFS = async (JSONBody) => {
-  //   const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
-  //   //making axios POST request to Pinata
-  //   axios.post(url, JSONBody, {
-  //     headers: {
-  //       pinata_api_key: key,
-  //       pinata_secret_api_key: secret,
-  //     }
-  //   })
-  //     .then(function (response) {
-  //       setMetadataUrl("https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
-  //       setStatus("metadata uploaded at https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
-  //       setDisable(false);
-  //     })
-  //     .catch(function (error) {
-  //       setStatus("metadata upload fail", error.message);
-  //       setDisable(false);
-  //     });
-  // };
+  const pinJSONToIPFS = async (JSONBody) => {
+    const url = `https://api.pinata.cloud/pinning/pinJSONToIPFS`;
+    //making axios POST request to Pinata
+    axios.post(url, JSONBody, {
+      headers: {
+        pinata_api_key: key,
+        pinata_secret_api_key: secret,
+      }
+    })
+      .then(function (response) {
+        setMetadataUrl("https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+        setStatus("metadata uploaded at https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash);
+        setDisable(false);
+      })
+      .catch(function (error) {
+        setStatus("metadata upload fail", error.message);
+        setDisable(false);
+      });
+  };
 
   const mint = (tokenUri) => {
     if (userAccount === "") {
